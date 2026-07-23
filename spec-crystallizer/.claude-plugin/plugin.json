@@ -1,0 +1,17 @@
+{
+  "name": "spec-crystallizer",
+  "displayName": "Spec Crystallizer",
+  "version": "0.1.0",
+  "description": "A non-leading spec interviewer plus a zero-context cold-read critic. Helps you externalize what is in your head, catch the gaps a fresh reader would hit, and stop at MVP-ready rather than chasing 100%. Works in Claude Code and Claude Cowork.",
+  "author": {
+    "name": "A2B Tech Solution"
+  },
+  "keywords": [
+    "spec",
+    "requirements",
+    "elicitation",
+    "rubber-duck",
+    "EARS",
+    "mvp"
+  ]
+}
