@@ -19,6 +19,17 @@ what a builder would actually need.
 
 Respond in the same language the spec is written in.
 
+If the spec is in Thai, translate the five headings below to these EXACT Thai headings —
+same order, same structure, informal and direct, no English headings mixed in:
+
+  ## ที่เข้าใจว่าระบบนี้ทำอะไร
+  ## ที่ต้องเดาเอาเอง ถึงจะอ่านรู้เรื่อง        (each item: "เดาว่า <X> เพราะ spec ไม่ได้บอกไว้")
+  ## ตรงที่ตีความได้หลายแบบ
+  ## ไม่ได้บอกว่าได้อะไรออกมา / พังแล้วยังไงต่อ
+  ## ต้องรู้อะไรอีก ถึงจะลงมือทำได้
+
+Thai for "I can't tell from the text" → "อ่านจากที่เขียนไว้ แล้วบอกไม่ได้"
+
 Read the spec file you were given, then produce EXACTLY this report and nothing else:
 
 ## What I think this system does
