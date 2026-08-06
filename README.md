@@ -19,6 +19,10 @@ marketplace/
 │   ├── .claude-plugin/plugin.json
 │   ├── skills/legacy-code-explorer/SKILL.md
 │   └── README.md
+├── comment-cleanup/            # a plugin (lives UNDER the marketplace)
+│   ├── .claude-plugin/plugin.json
+│   ├── skills/cleanup-comments/SKILL.md
+│   └── README.md
 └── README.md                   # this file
 ```
 
