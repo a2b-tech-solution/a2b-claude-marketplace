@@ -15,6 +15,10 @@ marketplace/
 │   ├── skills/spec-interview/SKILL.md
 │   ├── agents/spec-cold-reader.md
 │   └── README.md
+├── legacy-code-explorer/       # a plugin (lives UNDER the marketplace)
+│   ├── .claude-plugin/plugin.json
+│   ├── skills/legacy-code-explorer/SKILL.md
+│   └── README.md
 └── README.md                   # this file
 ```
 

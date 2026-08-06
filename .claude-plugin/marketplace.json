@@ -1,7 +1,7 @@
 {
   "name": "a2b-marketplace",
   "version": "1.0.0",
-  "description": "Personal plugin marketplace for A2B / Mayz. Holds spec-crystallizer and any future skills and plugins.",
+  "description": "Personal plugin marketplace for A2B / Mayz. Holds spec-crystallizer, legacy-code-explorer, and any future skills and plugins.",
   "owner": {
     "name": "Mayz",
     "email": "jaruwat.f@a2btechsolution.com"
@@ -13,6 +13,13 @@
       "source": "./spec-crystallizer",
       "category": "development",
       "tags": ["spec", "requirements", "elicitation", "EARS"]
+    },
+    {
+      "name": "legacy-code-explorer",
+      "description": "Explores legacy code before you refactor it: answers questions about flow, UI, and logic coupling, grades refactor risk per area, and writes a markdown knowledge document.",
+      "source": "./legacy-code-explorer",
+      "category": "development",
+      "tags": ["legacy", "refactor", "code-exploration", "documentation"]
     }
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "name": "legacy-code-explorer",
+  "displayName": "Legacy Code Explorer",
+  "version": "0.1.0",
+  "description": "Sends an agent into unfamiliar legacy code to answer your questions about flow, UI, and logic coupling, grade how risky each part is to touch, and write it all up as a markdown knowledge document you can refactor against.",
+  "author": {
+    "name": "A2B Tech Solution"
+  },
+  "keywords": [
+    "legacy",
+    "refactor",
+    "code-exploration",
+    "documentation",
+    "risk-assessment"
+  ]
+}
