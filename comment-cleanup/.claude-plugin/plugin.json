@@ -1,0 +1,15 @@
+{
+  "name": "comment-cleanup",
+  "displayName": "Comment Cleanup",
+  "version": "0.1.0",
+  "description": "Strips agent-left scratch comments and comments that just restate self-evident code, keeping only the ones that explain a genuinely non-obvious WHY.",
+  "author": {
+    "name": "A2B Tech Solution"
+  },
+  "keywords": [
+    "comments",
+    "cleanup",
+    "code-quality",
+    "review"
+  ]
+}

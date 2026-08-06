@@ -1,7 +1,7 @@
 {
   "name": "a2b-marketplace",
   "version": "1.0.0",
-  "description": "Personal plugin marketplace for A2B / Mayz. Holds spec-crystallizer, legacy-code-explorer, and any future skills and plugins.",
+  "description": "Personal plugin marketplace for A2B / Mayz. Holds spec-crystallizer, legacy-code-explorer, comment-cleanup, and any future skills and plugins.",
   "owner": {
     "name": "Mayz",
     "email": "jaruwat.f@a2btechsolution.com"
@@ -20,6 +20,13 @@
       "source": "./legacy-code-explorer",
       "category": "development",
       "tags": ["legacy", "refactor", "code-exploration", "documentation"]
+    },
+    {
+      "name": "comment-cleanup",
+      "description": "Strips agent-left scratch comments and comments that just restate self-evident code, keeping only the ones that explain a genuinely non-obvious WHY.",
+      "source": "./comment-cleanup",
+      "category": "development",
+      "tags": ["comments", "cleanup", "code-quality", "review"]
     }
   ]
 }
