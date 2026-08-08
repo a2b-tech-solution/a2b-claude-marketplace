@@ -1,0 +1,17 @@
+{
+  "projects": [
+    {
+      "name": "Project A",
+      "repos": [
+        { "name": "backend", "path": "/srv/bare/project-a-backend.git", "branch": "SIT" },
+        { "name": "frontend", "path": "/srv/bare/project-a-frontend.git" }
+      ]
+    },
+    {
+      "name": "Project B",
+      "repos": [
+        { "name": "monolith", "path": "/srv/bare/project-b.git", "branch": "UAT" }
+      ]
+    }
+  ]
+}

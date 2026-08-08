@@ -1,0 +1,21 @@
+{
+  "name": "git-weekly-report",
+  "displayName": "Git Weekly Report",
+  "version": "0.2.0",
+  "description": "Slash commands that turn git history into a weekly radar: per-repo activity/Issues&Fixes reports, plus a multi-repo project rollup that flags risk building up (repeated-patch hotspots, unmerged long-lived branches, trends vs. last week). Works against normal repos or bare mirrors. Pairs with a scheduled Routine for a fully automatic weekly report.",
+  "author": {
+    "name": "A2B Tech Solution"
+  },
+  "keywords": [
+    "git",
+    "changelog",
+    "report",
+    "weekly",
+    "history",
+    "schedule",
+    "radar",
+    "monitoring",
+    "multi-repo",
+    "bare-repo"
+  ]
+}
