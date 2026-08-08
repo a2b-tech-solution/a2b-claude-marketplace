@@ -14,31 +14,43 @@ this command was fired by a schedule with no user message to mirror, default to 
 Parse each token in `$ARGUMENTS` independently — they can appear in any combination:
 - A time expression (e.g. "2 weeks ago", "last monday", a date) → use it as `--since` instead
   of the default `--since="7 days ago"`.
-- A path (exists as a directory) → the repo/subdir to scope into (`cd` there, or `git -C <path>`).
+- A path (exists on disk) → the repo to scope into. It may be a normal repo, a subdir of one,
+  or a **bare repo/mirror** (a `.git` directory with no working tree, as you'd get from
+  `git clone --bare` or `git remote update` mirroring) — see below.
 - Anything else that resolves via `git rev-parse --verify <token>` → treat it as the branch/ref
   to read history from (e.g. `develop`, `release/2.4`, `SIT`).
 
-Confirm you're in a git repo (`git rev-parse --is-inside-work-tree`). If not, say so and stop
-— don't guess a path.
+### Resolve the repo target
+Every git command in the rest of this command should go through one target, call it `$GIT`,
+resolved once here — don't `cd` around or mix invocation styles mid-command:
+- No path given → operate on the current directory: confirm it's a repo with
+  `git rev-parse --git-dir`; if that fails, say so and stop, don't guess a path. `$GIT` = `git`.
+- Path given, and `git -C <path> rev-parse --is-bare-repository` prints `true` → it's a bare
+  repo/mirror, which has no working tree to `cd` into. `$GIT` = `git --git-dir=<path>`. All the
+  read-only commands used below (`log`, `show`, `diff`, `for-each-ref`, `blame`) work fine
+  against a bare repo — nothing in this command needs a checked-out working tree.
+- Path given, not bare → `$GIT` = `git -C <path>`.
+- If the path doesn't look like a git repo at all (neither check succeeds), say so and stop.
 
 ### Pick the integration branch
-If `$ARGUMENTS` already named a branch, use it — skip detection, `git fetch origin <branch>`
-first if it doesn't exist locally (automation environments often only have one branch checked
-out). Otherwise, **don't** default to whatever's checked out and **don't** assume `main`/
-`master`/`develop` by name — a lot of teams route real integration through a branch named
-something else entirely (`UAT`, `SIT`, `staging`, `release`, ...), possibly without ever
-touching `main` at all, and the checked-out branch in an automated run may just be whatever a
-fresh clone happened to default to. Detect the real one from activity instead:
+If `$ARGUMENTS` already named a branch, use it — skip detection, `$GIT fetch origin <branch>`
+first if it doesn't exist locally (automation environments, and freshly-synced bare mirrors,
+often only have one branch's worth of refs on hand). Otherwise, **don't** default to whatever's
+checked out and **don't** assume `main`/`master`/`develop` by name — a lot of teams route real
+integration through a branch named something else entirely (`UAT`, `SIT`, `staging`, `release`,
+...), possibly without ever touching `main` at all, and the checked-out branch in an automated
+run may just be whatever a fresh clone happened to default to. Detect the real one from
+activity instead:
 
-1. List every local + remote branch: `git for-each-ref --format='%(refname:short) %(committerdate:iso)' refs/heads refs/remotes`.
+1. List every local + remote branch: `$GIT for-each-ref --format='%(refname:short) %(committerdate:iso)' refs/heads refs/remotes`.
 2. Drop branches with no commits in the last 90 days — a stale branch isn't today's integration
    point even if it once was (e.g. an old `main` nobody merges into anymore).
 3. For each remaining candidate, measure:
    - **Merge in-degree** — merge commits *into* it in the last 90 days:
-     `git log <branch> --merges --since="90 days ago" --oneline | wc -l`. The integration
+     `$GIT log <branch> --merges --since="90 days ago" --oneline | wc -l`. The integration
      branch is the one things get merged INTO, not one that occasionally merges into others.
    - **Distinct sources** — how many differently-named branches/authors fed those merges
-     (`git log <branch> --merges --since="90 days ago" --pretty=%s` and read the merged-branch
+     (`$GIT log <branch> --merges --since="90 days ago" --pretty=%s` and read the merged-branch
      names out of the merge subjects, e.g. "Merge branch 'feature/x' into SIT"). A real
      integration point absorbs work from multiple feature branches, not just self-commits.
    - **Recency** — most recent commit date; ties favor the more recently active branch.
@@ -55,11 +67,12 @@ Once decided, also include any branches merged into the chosen integration branc
 report window, so a squash-merge or long-lived feature branch's history isn't silently dropped.
 
 ## 2. Pull the raw history
-Gather, don't summarize yet:
-- `git log --since="<window>" --pretty=format:'%h|%ad|%an|%s' --date=short --no-merges`
+Gather, don't summarize yet (every command below is `$GIT ...`, i.e. through the target
+resolved in §1):
+- `$GIT log --since="<window>" --pretty=format:'%h|%ad|%an|%s' --date=short --no-merges`
   for the individual commits, and separately the merge commits
   (`--merges --pretty=format:'%h|%ad|%an|%s'`) to catch PR titles.
-- `git log --since="<window>" --stat --no-merges` (or `--numstat` if you need to compute
+- `$GIT log --since="<window>" --stat --no-merges` (or `--numstat` if you need to compute
   totals) for what files/areas changed and how much.
 - If commit messages reference issue/ticket IDs (`#123`, `JIRA-456`, etc.), note them — you'll
   need them for the Issues & Fixes section.
@@ -82,17 +95,19 @@ commit (and every revert):
    from commit message" rather than guessing.
 2. **How it was fixed** — the actual change, in one line, `file:line` or file-level if the diff
    is large.
-3. **Introduced when** — if you can find the commit that introduced the bug (via `git log -S`
-   or `git blame` on the fixed lines, or a nearby earlier commit touching the same code), say
+3. **Introduced when** — if you can find the commit that introduced the bug (via `$GIT log -S`
+   or `$GIT blame` on the fixed lines, or a nearby earlier commit touching the same code), say
    whether it was introduced this window or was pre-existing debt.
 
 Group related fixes together (e.g. three commits all patching the same auth flow = one story,
 not three bullets).
 
 ## 5. Write the report
-Produce (and if writing to a file, save under `reports/git-weekly/<end-date>.md`, creating the
-directory if it doesn't exist — otherwise just answer inline if there's no obvious place to
-save in this repo):
+Produce (and if writing to a file, save under `reports/git-weekly/<end-date>.md` — relative to
+the current working directory, not inside the reported-on repo, since a bare mirror has no
+working tree to write into and a normal repo's working tree shouldn't get untracked report
+files dropped into it uninvited; create the directory if it doesn't exist. Otherwise just
+answer inline if there's no obvious place to save):
 
 1. **Overview** — which branch was reported on and how it was picked (given explicitly vs.
    auto-detected, with the evidence from §1), window covered, commit count, contributors, files

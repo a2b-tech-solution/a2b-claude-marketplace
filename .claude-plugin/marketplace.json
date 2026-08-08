@@ -30,10 +30,10 @@
     },
     {
       "name": "git-weekly-report",
-      "description": "Slash command that reads git history for the past week, summarizes code activity, and analyzes what problems came up and how they were fixed. Pairs with a scheduled Routine for a fully automatic weekly report.",
+      "description": "Slash commands that turn git history into a weekly radar: per-repo activity/Issues&Fixes reports, plus a multi-repo project rollup (via bare mirrors) that flags risk building up before it's an incident. Pairs with a scheduled Routine for a fully automatic weekly report.",
       "source": "./git-weekly-report",
       "category": "development",
-      "tags": ["git", "changelog", "report", "weekly", "history", "schedule"]
+      "tags": ["git", "changelog", "report", "weekly", "history", "schedule", "radar", "multi-repo"]
     }
   ]
 }
