@@ -1,6 +1,6 @@
 ---
 description: Summarize this week's git activity — what shipped, what broke, and what fixed it
-argument-hint: "[since] e.g. \"7 days ago\", \"last monday\", \"2026-08-01\", or a repo path"
+argument-hint: "[since] [branch] [path] e.g. \"7 days ago\", \"develop\", \"../other-repo\" — any order"
 ---
 
 # Weekly Git Activity Report
@@ -9,15 +9,24 @@ Respond in the same language the user writes in (Thai, English, or mixed — mir
 this command was fired by a schedule with no user message to mirror, default to Thai.
 
 ## 1. Scope the window
-- Default window: the last 7 days (`--since="7 days ago"`).
-- If `$ARGUMENTS` gives a different time expression (e.g. "2 weeks ago", "last monday",
-  a date), use that as `--since` instead.
-- If `$ARGUMENTS` looks like a path instead of a time expression, treat it as the repo/subdir
-  to scope into (`cd` there, or use `git -C <path>`) and keep the default 7-day window.
+Parse each token in `$ARGUMENTS` independently — they can appear in any combination:
+- A time expression (e.g. "2 weeks ago", "last monday", a date) → use it as `--since` instead
+  of the default `--since="7 days ago"`.
+- A path (exists as a directory) → the repo/subdir to scope into (`cd` there, or `git -C <path>`).
+- Anything else that resolves via `git rev-parse --verify <token>` → treat it as the branch/ref
+  to read history from (e.g. `develop`, `release/2.4`, a remote-tracking ref).
+
+No branch name is assumed or hardcoded. Read history from whichever branch is checked out
+(`HEAD`) at the time the command runs, or the branch named explicitly in `$ARGUMENTS` if given
+— this works identically whether the team's primary line of development is `main`, `master`,
+`develop`, or anything else. Do not special-case `main`/`master` as "the real branch" and
+`develop` as a variant; treat whatever branch is in scope as the one to report on.
+- Also include any branches merged into the scoped branch during the window, so a squash-merge
+  or long-lived feature branch's history isn't silently dropped.
 - Confirm you're in a git repo (`git rev-parse --is-inside-work-tree`). If not, say so and stop
   — don't guess a path.
-- Use the current default branch's history plus any branches merged in this window; don't
-  silently restrict to `main` only if other branches merged into it during the window.
+- If a branch was given but doesn't exist locally, try `git fetch origin <branch>` before
+  giving up — automation environments often only have the default branch checked out locally.
 
 ## 2. Pull the raw history
 Gather, don't summarize yet:

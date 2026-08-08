@@ -34,11 +34,17 @@ Then, inside the repo you want a report for:
 /weekly-report
 ```
 
-Arguments are optional:
+Arguments are optional, in any order:
 ```
 /weekly-report 2 weeks ago     # widen the window
 /weekly-report ../other-repo   # point at a different repo/subdir, still last 7 days
+/weekly-report develop         # report on the develop branch instead of whatever's checked out
+/weekly-report develop 2 weeks ago
 ```
+
+No branch is hardcoded to `main`/`master` — it reads whichever branch is checked out (`HEAD`)
+by default, or the branch you name explicitly. Works the same for repos where work lands
+straight on `develop`, a release branch, or anything else.
 
 ## Scheduling it weekly
 
@@ -52,24 +58,32 @@ Routines available), create a Routine that fires `/weekly-report` into a session
 repo attached, e.g. every Monday 09:00 Bangkok time (02:00 UTC):
 
 - Cron: `0 2 * * 1` (UTC)
-- Prompt: `/weekly-report`
+- Prompt: `/weekly-report develop` (name the branch explicitly if it isn't the repo's GitHub
+  default branch — see note below)
 - Target: a session (existing or fresh-per-fire) with the repo you want reported on attached
 
 Ask Claude in that environment to set this up for you — it can create the Routine directly.
-You'll need to tell it: which repo, which day/time, and where you want the report delivered
-(back into the session, Slack, email, etc.).
+You'll need to tell it: which repo, which branch, which day/time, and where you want the
+report delivered (back into the session, Slack, email, etc.).
 
 ### Option B — local cron + headless Claude Code
 If you're running Claude Code CLI locally against a repo on disk:
 
 ```cron
 # Monday 09:00 local time
-0 9 * * 1  cd /path/to/your/repo && claude -p "/weekly-report" >> reports/git-weekly/cron.log 2>&1
+0 9 * * 1  cd /path/to/your/repo && git fetch origin develop && git checkout develop && git pull --ff-only && claude -p "/weekly-report" >> reports/git-weekly/cron.log 2>&1
 ```
 
 Requires this plugin's `commands/` to be available to that `claude` invocation (installed
 globally, or referenced via `--plugin-dir`/`CLAUDE_PLUGIN_DIRS`) and `claude -p` (headless/
 print mode) to be authenticated non-interactively.
+
+> **Repos where work pushes straight to `develop`:** the command itself has no `main`/`master`
+> assumption — it reads whatever branch is checked out. The thing to watch is automation that
+> *clones fresh* on each run (a fresh Routine session, a CI-triggered clone): a fresh clone
+> checks out the repo's configured GitHub default branch, which may be `main` even if `develop`
+> is where the real weekly activity happens. In that case either pass the branch explicitly
+> (`/weekly-report develop`) or checkout it first, as in the cron example above.
 
 ## What it will and won't do
 - **Will**: read real git log/diff output, cite commit hashes for every claim, distinguish
