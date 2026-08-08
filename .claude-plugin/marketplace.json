@@ -1,7 +1,7 @@
 {
   "name": "a2b-marketplace",
   "version": "1.0.0",
-  "description": "Personal plugin marketplace for A2B / Mayz. Holds spec-crystallizer, legacy-code-explorer, comment-cleanup, and any future skills and plugins.",
+  "description": "Personal plugin marketplace for A2B / Mayz. Holds spec-crystallizer, legacy-code-explorer, comment-cleanup, git-weekly-report, and any future skills and plugins.",
   "owner": {
     "name": "Mayz",
     "email": "jaruwat.f@a2btechsolution.com"
@@ -27,6 +27,13 @@
       "source": "./comment-cleanup",
       "category": "development",
       "tags": ["comments", "cleanup", "code-quality", "review"]
+    },
+    {
+      "name": "git-weekly-report",
+      "description": "Slash command that reads git history for the past week, summarizes code activity, and analyzes what problems came up and how they were fixed. Pairs with a scheduled Routine for a fully automatic weekly report.",
+      "source": "./git-weekly-report",
+      "category": "development",
+      "tags": ["git", "changelog", "report", "weekly", "history", "schedule"]
     }
   ]
 }

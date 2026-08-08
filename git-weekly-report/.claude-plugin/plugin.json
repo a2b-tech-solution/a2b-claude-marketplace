@@ -1,0 +1,17 @@
+{
+  "name": "git-weekly-report",
+  "displayName": "Git Weekly Report",
+  "version": "0.1.0",
+  "description": "Slash command that reads git history for the past week, summarizes code activity, and analyzes what problems came up and how they were fixed. Pairs with a scheduled Routine for a fully automatic weekly report.",
+  "author": {
+    "name": "A2B Tech Solution"
+  },
+  "keywords": [
+    "git",
+    "changelog",
+    "report",
+    "weekly",
+    "history",
+    "schedule"
+  ]
+}

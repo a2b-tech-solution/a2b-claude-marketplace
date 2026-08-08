@@ -23,6 +23,10 @@ marketplace/
 │   ├── .claude-plugin/plugin.json
 │   ├── skills/cleanup-comments/SKILL.md
 │   └── README.md
+├── git-weekly-report/          # a plugin (lives UNDER the marketplace)
+│   ├── .claude-plugin/plugin.json
+│   ├── commands/weekly-report.md
+│   └── README.md
 └── README.md                   # this file
 ```
 
