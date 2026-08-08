@@ -110,10 +110,26 @@ Claude Code: `@spec-cold-reader specs/<slug>.md`; ใน Cowork: บอก Claud
 กับไฟล์นี้) มันจะอ่านแบบไม่รู้อะไรเลย แล้วบอกว่าเข้าใจอะไรบ้าง — ตรงที่มันเข้าใจไม่ตรงกับที่คิดไว้
 คือส่วนที่ยังอยู่แต่ในหัวเรา"
 
+Once the cold reader's report is back, tell the user they can ground it in reality before the
+next interview pass: "If you want the open questions grounded in what actually exists — real
+code, config, or data — hand the cold reader's report to spec-fact-finder along with the
+codebase (in Claude Code: `@spec-fact-finder`, give it the cold-read report + spec file + where
+to look; in Cowork: ask Claude to use the spec fact finder). It won't answer the questions for
+you, but it'll show you which real options are already out there so you're choosing from facts,
+not guessing blind."
+
+Thai version: "ถ้าอยากให้คำถามที่ cold-reader เปิดไว้ มีของจริงมารองรับ — โค้ดจริง, config จริง,
+data จริง — ส่งรายงานของ cold-reader ต่อให้ spec-fact-finder พร้อมชี้ codebase ให้มันไปหา (ใน
+Claude Code: `@spec-fact-finder`, ยื่นรายงาน cold-read + ไฟล์ spec + จุดที่ควรไปดู; ใน Cowork: บอก
+Claude ให้ใช้ spec fact finder) มันจะไม่ตอบคำถามแทนเรา แต่จะโชว์ว่าของจริงมีตัวเลือกอะไรบ้าง
+เพื่อให้ตัดสินใจจากของจริง ไม่ใช่เดาส่ง ๆ"
+
 ## The loop
-interview → draft spec → cold-read → compare the cold reader's understanding against what
-you meant → the mismatches are your hidden assumptions → feed them back into another short
-interview pass → repeat until the cold reader's playback matches your intent.
+interview → draft spec → cold-read → (optional) fact-find the cold reader's open questions
+against real code/config/data → compare the cold reader's understanding, and the fact finder's
+grounded options, against what you meant → the mismatches are your hidden assumptions → feed
+them back into another short interview pass → repeat until the cold reader's playback matches
+your intent.
 
 ---
 If the user has already given an idea, begin the interview now. If not, ask for a one-line
